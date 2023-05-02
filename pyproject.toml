@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pokedesk"
+version = "0.1.0"
+description = "The original 151 Pokémon REST api"
+authors = ["Gurkan Akcakaya"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2"
+pytest = "^7.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
