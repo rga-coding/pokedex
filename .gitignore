@@ -318,12 +318,7 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 ### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+.vscode
 
 # Local History for Visual Studio Code
 .history/
@@ -337,5 +332,4 @@ fabric.properties
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,pycharm,macos
-
 .python-version
