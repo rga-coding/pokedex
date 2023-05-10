@@ -7,7 +7,14 @@ class UserCreateView(APIView):
         serializer = UserRegisterSerializer(data=user_data)
 
         if serializer.is_valid():
-            serializer.save()
+            # user = serializer.save()
+            # token = Token.objects.get(user=user).key
+            # serializer.save(token=token)
+            # serializer.data['token'] = token
+            user = serializer.save()
+            token = Token.objects.get(user=user).key
+            serializer_data = serializer.data.copy()
+            serializer_data.update({'token': token})
         else:
             return Response(
                 data={
