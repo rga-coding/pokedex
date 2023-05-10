@@ -76,3 +76,20 @@ class TeamListView(APIView):
         serializer = TeamSerializer(team, many=True)
         return Response(serializer.data)
 
+
+class TeamDetailView(APIView):
+
+    def get(self, request, team: str) -> object:
+        """
+        Get requested team
+        """
+        my_team = Team.objects.filter(name=team.lower())
+        if not my_team:
+            return Response(
+                data={"errors": f"Team '{team}' not found!"},
+                status=404,
+            )
+        serializer = TeamSerializer(my_team, many=True)
+        return Response(serializer.data)
+
+
