@@ -117,3 +117,27 @@ class TeamCreateView(APIView):
         return Response(serializer.data, status=201)
 
 
+class TeamUpdateView(APIView):
+    def put(self, request) -> object:
+        """
+        Update existing team.
+        """
+        team_data = {k: v.lower() for k, v in request.data.items()}
+        to_update_team = Team.objects.filter(name=team_data.get('name'))
+        if not to_update_team:
+            return Response(
+                data={"errors": "Team not found!"},
+                status=404,
+            )
+        to_update_team.update(
+            name=team_data.get('name'),
+            trainer=team_data.get('trainer'),
+            pokemon_1=team_data.get('pokemon_1'),
+            pokemon_2=team_data.get('pokemon_2'),
+            pokemon_3=team_data.get('pokemon_3'),
+            pokemon_4=team_data.get('pokemon_4'),
+            pokemon_5=team_data.get('pokemon_5'),
+            pokemon_6=team_data.get('pokemon_6'),
+        )
+        return Response(team_data)
+
