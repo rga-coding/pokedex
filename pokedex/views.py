@@ -63,6 +63,23 @@ class PokemonCreateView(APIView):
         return Response(newly_added_pokemon, status=201)
 
 
+# class TeamTokenView():
+#     # authentication_classes = [TokenAuthentication]
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request, format=None):
+#         from django.contrib.auth.models import User
+#         user = User.objects.get(username='trainer')
+#         token = Token.objects.get(user=user)
+#         content = {
+#             'user': user,  # `django.contrib.auth.User` instance.
+#             # 'user': str(request.user),  # `django.contrib.auth.User` instance.
+#             # 'auth': str(request.auth),  # None
+#             'auth': token,  # None
+#         }
+#         return Response(content)
+
+
 class TeamListView(APIView):
     def get(self, request) -> object:
         """
@@ -141,3 +158,14 @@ class TeamUpdateView(APIView):
         )
         return Response(team_data)
 
+
+class TeamDeleteView(APIView):
+    def delete(self, request, team: str) -> object:
+        to_delete_team = Team.objects.filter(name=team.lower())
+        if not to_delete_team:
+            return Response(
+                data={"errors": "Team not found!"},
+                status=404,
+            )
+        to_delete_team.delete()
+        return Response({"message": f"Team {team.lower()} deleted!"})
