@@ -2,9 +2,10 @@ import requests
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from pokedex.models import Pokemon, Team
 from pokedex.utils import add_pokeapi_pokemon
 
-from .serializer import PokemonSerializer
+from .serializer import PokemonSerializer, TeamSerializer
 
 
 class PokemonListView(APIView):
@@ -91,5 +92,28 @@ class TeamDetailView(APIView):
             )
         serializer = TeamSerializer(my_team, many=True)
         return Response(serializer.data)
+
+
+class TeamCreateView(APIView):
+    def post(self, request) -> object:
+        """
+        Create team with a trainer and at least 1 and at most 6 pokemon.
+        """
+
+        team_data = {k: v.lower() for k, v in request.data.items()}
+        serializer = TeamSerializer(data=team_data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return Response(
+                data={
+                    "errors": f"{', '.join(serializer.errors.keys())}",
+                    "team": "Name must be unique",
+                    "pokemon": "Pokemon names must a known pokemon.",
+                },
+                status=400,
+            )
+
+        return Response(serializer.data, status=201)
 
 
