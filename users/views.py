@@ -1,6 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+
 from users.serializer import UserRegisterSerializer
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+
+
 class UserCreateView(APIView):
     def post(self, request) -> object:
         user_data = {k: v.lower() for k, v in request.data.items()}
@@ -23,3 +28,20 @@ class UserCreateView(APIView):
                 status=400,
             )
         return Response(serializer_data, status=201)
+
+
+class UserLoginView(APIView):
+    def post(self, request) -> object:
+        user_data = {k: v.lower() for k, v in request.data.items()}
+        serializer = AuthTokenSerializer(data=user_data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
+        else:
+            return Response(
+                data={
+                    "errors": f"{', '.join(serializer.errors.keys())}",
+                },
+                status=401,
+            )
