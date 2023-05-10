@@ -2,7 +2,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from pokedex.models import Pokemon
+from pokedex.utils import add_pokeapi_pokemon
 
 from .serializer import PokemonSerializer
 
@@ -35,4 +35,29 @@ class PokemonDetailView(APIView):
             )
         serializer = PokemonSerializer(pokemon, many=True)
         return Response(serializer.data)
+
+
+class PokemonCreateView(APIView):
+    def post(self, request) -> object:
+        pokemon_identifier = request.data.get('pokemon')
+        if not pokemon_identifier:
+            return Response(
+                data={"errors": "Expected key 'pokemon' not found"},
+                status=400,
+            )
+        req = requests.get(f"https://pokeapi.co/api/v2/pokemon/{request.data.get('pokemon')}/")
+        if req.status_code != 404:
+            return Response(
+                data={"errors": f"Requested pokemon not found!"},
+                status=req.status_code,
+            )
+        elif req.status_code != 200:
+            return Response(
+                data={"errors": f"Unexpected error: {req.reason}!"},
+                status=req.status_code,
+            )
+
+        add_pokeapi_pokemon([req.json()])
+        newly_added_pokemon = Pokemon.objects.filter(name=req['name'])
+        return Response(newly_added_pokemon, status=201)
 
