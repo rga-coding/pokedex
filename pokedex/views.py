@@ -61,3 +61,18 @@ class PokemonCreateView(APIView):
         newly_added_pokemon = Pokemon.objects.filter(name=req['name'])
         return Response(newly_added_pokemon, status=201)
 
+
+class TeamListView(APIView):
+    def get(self, request) -> object:
+        """
+        Get all teams
+        """
+
+        team = Team.objects.all()
+        # base_url/team?search
+        query = self.request.GET.get('search')
+        if query is not None:
+            team = team.filter(name__contains=query) | team.filter(trainer__contains=query)
+        serializer = TeamSerializer(team, many=True)
+        return Response(serializer.data)
+
