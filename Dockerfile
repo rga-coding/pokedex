@@ -6,9 +6,9 @@ LABEL name="WisemenPokedex" \
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get -y clean && apt-get -y autoclean && apt-get -y autoremove
 RUN mkdir -p wisemen
-COPY ./* wisemen
+COPY . /wisemen
 
-WORKDIR wisemen
+WORKDIR /wisemen
 RUN set -ex \
     # Install poetry
     && pip3 install -U pip poetry \
