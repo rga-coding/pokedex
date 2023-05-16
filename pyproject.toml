@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "Pokedex"
+version = "0.1.0"
+description = "The original 151 Pokémon REST api"
+authors = ["Gurkan Akcakaya"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2"
+pytest = "^7.3.1"
+djangorestframework = "^3.14.0"
+requests = "^2.30.0"
+pillow = "^9.5.0"
+
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
