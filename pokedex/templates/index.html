@@ -1,0 +1,15 @@
+{% comment %} Will not be used {% endcomment %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'pokedex/style.css' %}">
+
+
+{% if pokemons %}
+    <ul>
+    {% for pokemon in pokemons %}
+        <li><a href="{% url 'pokemon:detail' pokemon.name %}">{{ pokemon.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No pokemon found.</p>
+{% endif %}
